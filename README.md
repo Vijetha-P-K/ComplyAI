@@ -1,72 +1,151 @@
-# ComplyAI – AI Business Compliance & Document Intelligence Platform
+🤖 ComplyAI – AI Business Compliance & Document Intelligence Platform
 
-Enterprise SaaS platform that analyzes tenders, contracts, invoices, policies and meeting
-notes with specialized AI agents (Groq Llama 3.3 via LangChain), stores everything in
-PostgreSQL, powers a RAG Policy Assistant with ChromaDB, and generates downloadable PDF reports.
+ComplyAI is an AI-powered business compliance and document intelligence platform that helps organizations analyze important business documents, identify risks, verify information, compare document versions, and generate actionable insights through specialized AI agents.
 
-## Architecture
+The platform combines multiple AI-powered modules with document extraction, RAG-based knowledge retrieval, database storage, and automated report generation in one centralized application.
 
-```
-React (Vite) ──REST/Axios──▶ FastAPI ──LangChain──▶ Groq LLM (Llama 3.3)
-                               │
-                               ├──SQLAlchemy──▶ PostgreSQL  (users, documents, analyses, reports, activity)
-                               ├──────────────▶ ChromaDB    (embeddings, RAG knowledge base)
-                               └──ReportLab───▶ PDF reports
-```
+🚀 Features
+📑 AI Tender Analyzer — Analyzes tenders for eligibility, requirements, deadlines, risks, and submission checklists.
+⚖️ AI Contract & Legal Analyzer — Identifies important clauses, potential risks, and provides plain-language explanations.
+✅ AI Compliance Checker — Detects compliance gaps and inconsistencies and provides a compliance score.
+🧾 AI Invoice & Purchase Verification — Identifies mismatches and duplicates and provides payment recommendations.
+🔄 AI Business Document Comparator — Compares two document versions section by section and highlights differences.
+🧠 AI Business Policy Assistant — Uses RAG to answer questions from uploaded company documents.
+📝 AI Meeting Minutes Generator — Extracts decisions, action items, owners, and deadlines from meeting content.
+📊 AI Report Center — Generates downloadable PDF reports for completed analyses.
+💻 Technology Stack
+Layer	Technologies
+🎨 Frontend	React.js, Vite, Axios
+⚙️ Backend	Python, FastAPI
+🧠 AI	Groq LLM, Llama 3.3, LangChain
+🗄️ Database	PostgreSQL, SQLAlchemy
+🔎 Vector Database	ChromaDB
+📄 Document Processing	PDF, DOCX, TXT, MD, CSV, OCR
+📊 Reports	ReportLab
+🐳 Containerization	Docker, Docker Compose
+📁 Project Structure
+ComplyAI/
+├── backend/
+│   ├── app/
+│   │   ├── api/             # API routes and endpoints
+│   │   ├── core/            # Configuration and security
+│   │   ├── models/          # Database models
+│   │   └── services/        # AI, extraction, activity and report services
+│   ├── requirements.txt
+│   └── Dockerfile
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/      # Reusable UI components
+│   │   ├── pages/           # Application pages
+│   │   ├── api/             # API client
+│   │   └── context/         # Authentication context
+│   ├── package.json
+│   └── Dockerfile
+│
+├── docker-compose.yml
+└── README.md
+🔄 How It Works
 
-## Modules
+The platform follows an AI-powered document intelligence workflow:
 
-1. **AI Tender Analyzer** – eligibility, requirements, deadlines, risks, submission checklist
-2. **AI Contract & Legal Analyzer** – plain-language clauses, risky clauses with legal references, risk score
-3. **AI Compliance Checker** – gaps, inconsistencies, compliance score
-4. **AI Invoice & Purchase Verification** – mismatches, duplicates, payment recommendation
-5. **AI Business Document Comparator** – section-by-section version comparison
-6. **AI Business Policy Assistant (RAG)** – ChromaDB-backed Q&A over company documents
-7. **AI Meeting Minutes Generator** – decisions, action items, owners, deadlines
-8. **AI Report Center** – auto-generated downloadable PDF reports for every analysis
+📄 Document → ⚙️ FastAPI → 🧠 AI Agent → 🔎 Knowledge Retrieval → 📊 Analysis → 📑 Report
 
-Supported uploads: **PDF, DOCX, TXT, MD, CSV and images (PNG/JPG — via OCR)**.
+📤 The user uploads a supported business document.
+🔍 The system extracts the document content.
+🧠 The selected AI agent analyzes the extracted information using the Groq LLM.
+🔎 Relevant information can be retrieved from the ChromaDB knowledge base.
+📊 The system generates structured analysis results, scores, risks, or recommendations.
+💾 Analysis history and related information are stored in PostgreSQL.
+📑 A downloadable PDF report can be generated from the analysis.
+📄 Supported Documents
 
-## Local Development
+ComplyAI supports:
 
-### Backend
-```bash
-cd backend
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env   # set GROQ_API_KEY and DATABASE_URL
-uvicorn app.main:app --reload --port 8000
-```
-Requires PostgreSQL (`createdb complyai`) and `tesseract-ocr` for image OCR.
+📕 PDF
+📘 DOCX
+📄 TXT
+📝 Markdown
+📊 CSV
+🖼️ PNG / JPG images with OCR support
+🧩 Main Modules
+📑 AI Tender Analyzer
 
-### Frontend
-```bash
-cd frontend
-npm install
-npm run dev   # http://localhost:5173 (proxies /api to :8000)
-```
+Analyzes tender documents and extracts eligibility requirements, deadlines, risks, and submission requirements.
 
-### Docker (full stack)
-```bash
-GROQ_API_KEY=your-key docker compose up --build
-# frontend: http://localhost:8080, API: http://localhost:8000/docs
-```
+⚖️ AI Contract & Legal Analyzer
 
-## Deployment
+Reviews contracts and identifies important clauses, potential risks, and legal concerns.
 
-- **Frontend → Vercel**: import the `frontend/` directory, set `VITE_API_URL` to the backend URL.
-- **Backend → Render/AWS**: deploy `backend/Dockerfile`, set `DATABASE_URL` (cloud PostgreSQL),
-  `GROQ_API_KEY`, `JWT_SECRET_KEY`, `CORS_ORIGINS` (your Vercel URL). Mount a persistent disk for
-  `UPLOAD_DIR` and `CHROMA_DIR`.
-- **CI**: GitHub Actions builds and lints both apps on every push/PR.
+✅ AI Compliance Checker
 
-## Environment Variables
+Checks documents for compliance gaps, missing requirements, and inconsistencies.
 
-| Variable | Description |
-|---|---|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `GROQ_API_KEY` | Groq API key |
-| `GROQ_MODEL` | default `llama-3.3-70b-versatile` |
-| `JWT_SECRET_KEY` | secret for JWT signing |
-| `CORS_ORIGINS` | comma-separated allowed origins |
-| `VITE_API_URL` | (frontend) backend base URL for production |
+🧾 AI Invoice & Purchase Verification
+
+Verifies invoices and purchase-related documents by detecting mismatches and duplicate information.
+
+🔄 AI Business Document Comparator
+
+Compares two versions of a document and highlights changes between them.
+
+🧠 AI Business Policy Assistant
+
+Uses Retrieval-Augmented Generation with ChromaDB to answer questions based on uploaded company policies and documents.
+
+📝 AI Meeting Minutes Generator
+
+Converts meeting content into structured decisions, action items, responsible owners, and deadlines.
+
+📊 AI Report Center
+
+Provides access to generated analysis reports and downloadable PDF documents.
+
+🏗️ System Architecture
+                    👤 User
+                       │
+                       ▼
+                🎨 React + Vite
+                       │
+                    REST API
+                       │
+                       ▼
+                 ⚙️ FastAPI
+                       │
+          ┌────────────┼────────────┐
+          ▼            ▼            ▼
+      🧠 Groq       🔎 ChromaDB   🗄️ PostgreSQL
+       LLM             RAG
+          │            │            │
+          └────────────┼────────────┘
+                       ▼
+                 📊 AI Analysis
+                       │
+                       ▼
+                  📑 PDF Report
+🎯 Project Objective
+
+The objective of ComplyAI is to simplify business compliance and document-related workflows by using specialized AI agents to transform complex business documents into clear, structured, and actionable insights.
+
+Instead of manually reviewing every document, users can upload their documents and allow the appropriate AI agent to analyze the information, identify important findings, and generate useful reports.
+
+▶️ Run with Docker
+
+From the ComplyAI project directory, run:
+
+docker compose up --build
+
+Once all containers are running, open the application:
+
+🌐 Website
+
+http://localhost:8080
+
+👉 Click here to open ComplyAI:
+http://localhost:8080
+
+
+🌟 Project Vision
+
+ComplyAI brings AI-powered document intelligence, compliance analysis, and business decision support into one unified platform — making complex document workflows faster, smarter, and easier to manage.
+
