@@ -15,7 +15,7 @@ The platform combines **AI-powered analysis, document extraction, RAG-based know
 * 📝 **AI Meeting Minutes Generator** — Extracts decisions, action items, owners, and deadlines from meeting content.
 * 📊 **AI Report Center** — Generates downloadable PDF reports for completed analyses.
 
-## 💻 Technology Stack
+## 💻 Technology Stack 
 
 | Layer                      | Technologies                   |
 | -------------------------- | ------------------------------ |
